@@ -19,7 +19,7 @@ ifdef MINGW
 endif
 PKG_CONFIG ?= pkg-config
 
-COMPILER_FLAGS = `${PKG_CONFIG} --cflags sdl2` -Wall -Werror -Wno-comment -Wno-unused-variable -Wno-unused-parameter -g
+COMPILER_FLAGS = `${PKG_CONFIG} --cflags sdl2` -Wall -Wno-comment -Wno-unused-variable -Wno-unused-parameter -g -x c++ -fpermissive
 LINK_FLAGS = `${PKG_CONFIG} --libs sdl2` -lSDL2_image -lSDL2_mixer -lm
 
 CFLAGS = $(COMPILER_FLAGS)

@@ -38,18 +38,18 @@ piecedef *piecedef_cpy(piecedef *pd)
    if(!pd)
       return NULL;
 
-   piecedef *new = malloc(sizeof(piecedef));
+   piecedef *p = malloc(sizeof(piecedef));
 
-   new->qrs_id = pd->qrs_id;
-   new->flags = pd->flags;
-   new->anchorx = pd->anchorx;
-   new->anchory = pd->anchory;
+   p->qrs_id = pd->qrs_id;
+   p->flags = pd->flags;
+   p->anchorx = pd->anchorx;
+   p->anchory = pd->anchory;
 
    int i = 0;
    for(i = 0; i < 4; i++)
-      new->rotation_tables[i] = gridcpy(pd->rotation_tables[i], NULL);
+      p->rotation_tables[i] = gridcpy(pd->rotation_tables[i], NULL);
 
-   return new;
+   return p;
 }
 
 int pdsetw(piecedef *pd, int w)

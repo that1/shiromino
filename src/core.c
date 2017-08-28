@@ -54,13 +54,13 @@ struct bindings defaultkeybinds[2] = {
 };
 
 struct settings defaultsettings = {
-   .keybinds = &defaultkeybinds[0],
-   .video_scale = 1,
-   .fullscreen = 0,
-   .sfx_volume = 100,
-   .mus_volume = 100,
-   .master_volume = 50,
-   .home_path = NULL
+   /* .keybinds = */ &defaultkeybinds[0],
+   /* .video_scale = */ 1,
+   /* .fullscreen = */ 0,
+   /* .master_volume = */ 50,
+   /* .sfx_volume = */ 100,
+   /* .mus_volume = */ 100,
+   /* .home_path = */ NULL
 };
 
 
