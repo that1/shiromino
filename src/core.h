@@ -7,7 +7,7 @@
 #define SIMULATE_G3    0x0040
 
 #define FPS            60.0
-#define G2_FPS        61.68
+#define G2_FPS         61.68
 
 #define RECENT_FRAMES 60
 #define FRAMEDELAY_ERR 0
