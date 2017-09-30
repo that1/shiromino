@@ -194,8 +194,6 @@ struct coreState_ {
 
     long double avg_sleep_ms_recent_array[RECENT_FRAMES];
     int recent_frame_overload;
-
-    int obnoxious_text;        // experimental
 };
 
 struct game {
@@ -238,9 +236,6 @@ int gfx_buttons_input(coreState *cs);
 
 int request_fps(coreState *cs, double fps);
 long framedelay(Uint64 ns_elap, double fps);
-
-long waste_time();
-int toggle_obnoxious_text(coreState *cs, void *data);
 
 struct replay *compare_replays(struct replay *r1, struct replay *r2);
 

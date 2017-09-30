@@ -13,8 +13,8 @@
 #define PSARE             0x0001
 #define PSLINEARE         0x0002
 #define PSFALL             0x0004
-#define PSDASLEFT        0x0008
-#define PSDASRIGHT        0x0010
+// #define PSDASLEFT        0x0008
+// #define PSDASRIGHT        0x0010
 #define PSLOCK             0x0020
 #define PSLINECLEAR        0x0040
 #define PSFKICKED        0x0080

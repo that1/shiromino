@@ -292,7 +292,6 @@ coreState *coreState_create()
    }
 
    cs->recent_frame_overload = -1;
-   cs->obnoxious_text = 1;
 
    return cs;
 }
@@ -654,8 +653,6 @@ int run(coreState *cs)
          cs->master_volume = cs->settings->master_volume;
          Mix_Volume(-1, (cs->sfx_volume * cs->master_volume)/100);
       }
-
-      //if(waste_time() == FRAMEDELAY_ERR) return 1;
 
       timestamp = SDL_GetPerformanceCounter() - timestamp;
       sleep_ns = framedelay(timestamp, cs->fps);
@@ -1369,29 +1366,6 @@ long framedelay(Uint64 ns_elap, double fps)
       return t.tv_nsec;
    else
       return 1;
-}
-
-long waste_time()
-{
-   struct timespec t = {0, 0};
-   t.tv_nsec = (long)((0.01) * 1000000000.0);
-
-   if(nanosleep(&t, NULL)) {
-      printf("Error: nanosleep() returned failure during frame length calculation\n");
-      return FRAMEDELAY_ERR;
-   }
-
-   return 0;
-}
-
-int toggle_obnoxious_text(coreState *cs, void *data)
-{
-   if(cs->obnoxious_text)
-      cs->obnoxious_text = 0;
-   else
-      cs->obnoxious_text = 1;
-
-   return 0;
 }
 
 struct replay *compare_replays(struct replay *r1, struct replay *r2)
