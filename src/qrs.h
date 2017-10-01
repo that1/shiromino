@@ -361,10 +361,7 @@ const char *get_qrspiece_name(int n);
 void qrsdata_destroy(qrsdata *q);
 void pracdata_destroy(struct pracdata *d);
 
-piecedef *qrspent_create(int pent);
 piecedef **qrspool_create();
-piecedef *arstet_create(int tet);
-piecedef **arspool_create(piecedef **piecepool, int type);
 piecedef *qrspiece_cpy(piecedef **piecepool, int index);
 
 grid_t *qrsfield_create();
