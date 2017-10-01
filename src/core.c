@@ -212,7 +212,6 @@ coreState *coreState_create()
 
    int i = 0;
 
-   cs->running = 0;
    cs->fps = FPS;
    //cs->keyquit = SDLK_F11;
    cs->text_editing = 0;
@@ -498,7 +497,6 @@ int init(coreState *cs, struct settings *s)
    check(cs->menu != NULL, "menu_create returned failure\n");
 
    cs->menu->init(cs->menu);
-   cs->running = 1;
 
    return 0;
 
@@ -564,8 +562,6 @@ void quit(coreState *cs)
 
    SDL_Quit();
    IMG_Quit();
-
-   cs->running = 0;
 }
 
 int run(coreState *cs)
@@ -573,13 +569,13 @@ int run(coreState *cs)
    if(!cs)
       return -1;
 
-   while(cs->running)
+   bool running = true;
+   while(running)
    {
       Uint64 timestamp = SDL_GetPerformanceCounter();
 
       if(procevents(cs))
       {
-         cs->running = 0;
          return 1;
       }
 
@@ -612,14 +608,14 @@ int run(coreState *cs)
             cs->menu = NULL;
 
             if(!cs->p1game)
-               cs->running = 0;
+               running = 0;
          }
 
          //if(!((!cs->button_emergency_override && ((!cs->p1game || cs->menu_input_override) ? 1 : 0))))   printf("Not processing menu input\n");
       }
 
       if(!cs->menu && !cs->p1game)
-         cs->running = 0;
+         running = 0;
 
       //SDL_SetRenderTarget(cs->screen.renderer, NULL);
 
@@ -717,7 +713,6 @@ int procevents(coreState *cs)
    while(SDL_PollEvent(&event)) {
       switch(event.type) {
          case SDL_QUIT:
-            cs->running = 0;
             return 1;
 
          case SDL_JOYAXISMOTION:
@@ -980,11 +975,6 @@ int procevents(coreState *cs)
 
                if((kc == kb->escape) && (!k->escape))
                   k->escape = 1;
-
-               /*if(kc == cs->keyquit) {
-                  cs->running = 0;
-                  return 1;
-               }*/
             }
 
             if(k->left && k->right) {

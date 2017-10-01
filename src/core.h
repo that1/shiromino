@@ -108,7 +108,6 @@ typedef struct game game_t;
 #include "qrs.h"
 
 struct coreState_ {
-    int running;
     double fps;        // because tap fps = 61.68
 
     int text_editing;
