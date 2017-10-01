@@ -375,7 +375,6 @@ int push_undo_clear_confirm(coreState *cs, void *data)
     gfx_createbutton(cs, "NO", 640/2 + 4*16 - 6, 480/2 + 3*16 - 6,
                      BUTTON_EMERGENCY, undo_clear_confirm_no, button_emergency_inactive, NULL, 0xFFA0A0FF);
 
-    free(fmt);
     return 0;
 }
 

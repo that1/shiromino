@@ -115,6 +115,8 @@ void gfx_message_destroy(gfx_message *m)
    if(m->text)
       bdestroy(m->text);
 
+   if(m->fmt)
+      free(m->fmt);
    free(m);
 }
 
@@ -416,23 +418,14 @@ int gfx_drawmessages(coreState *cs, int type)
         if(type == 0 && (m->flags & MESSAGE_EMERGENCY))
             continue;
 
-      if(!cs->gfx_messages[i]->counter) {
-         gfx_message_destroy(cs->gfx_messages[i]);
+      if(!m->counter || (m->delete_check && m->delete_check(cs))) {
+         gfx_message_destroy(m);
          cs->gfx_messages[i] = NULL;
          continue;
       }
 
-        if(m->delete_check) {
-            if(m->delete_check(cs)) {
-                gfx_message_destroy(cs->gfx_messages[i]);
-             cs->gfx_messages[i] = NULL;
-             continue;
-            }
-        }
-
       gfx_drawtext(cs, m->text, m->x, m->y, m->font, m->fmt);
-        if(m->counter > 0)
-            m->counter--;
+      m->counter--;
    }
 
    if(n == cs->gfx_messages_max) {

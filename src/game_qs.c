@@ -1120,29 +1120,30 @@ int qs_game_frame(game_t *g)
     }
 
     if(c->init < 120) {
-        struct text_formatting *fmt = text_fmt_create(0, 0x00FF00FF, 0);
-        fmt->size_multiplier = 2.0;
-        fmt->outlined = false;
-        if(q->pracdata)
-            fmt->outlined = true;
+        if (c->init == 0 || c->init == 60) {
+            struct text_formatting *fmt = text_fmt_create(0, 0x00FF00FF, 0);
+            fmt->size_multiplier = 2.0;
+            fmt->outlined = false;
+            if(q->pracdata)
+                fmt->outlined = true;
 
-        fmt->outline_rgba = 0x00000080;
+            fmt->outline_rgba = 0x00000080;
 
-        if(c->init == 0) {
-            gfx_pushmessage(cs, "READY", (4*16 + 8 + q->field_x), (11*16 + q->field_y),
-                            0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
+            if(c->init == 0) {
+                gfx_pushmessage(cs, "READY", (4*16 + 8 + q->field_x), (11*16 + q->field_y),
+                                0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
 
-            sfx_play(&cs->assets->ready);
+                sfx_play(&cs->assets->ready);
+            }
+
+            else if(c->init == 60) {
+                fmt->rgba = 0xFF0000FF;
+                gfx_pushmessage(cs, "GO", (6*16 + q->field_x), (11*16 + q->field_y),
+                                0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
+
+                sfx_play(&cs->assets->go);
+            }
         }
-
-        else if(c->init == 60) {
-            fmt->rgba = 0xFF0000FF;
-            gfx_pushmessage(cs, "GO", (6*16 + q->field_x), (11*16 + q->field_y),
-                            0, monofont_fixedsys, fmt, 60, qrs_game_is_inactive);
-
-            sfx_play(&cs->assets->go);
-        }
-
         else if(c->init == 119 && !q->pracdata) {
             if(q->replay) {
                 qrs_start_playback(g);
