@@ -20,6 +20,8 @@
 #include "gfx_menu.h"
 
 
+static long framedelay(Uint64 ticks_elap, double fps);
+
 /* <constants> */
 
 
@@ -571,14 +573,9 @@ int run(coreState *cs)
    if(!cs)
       return -1;
 
-   int i = 0;
-   long sleep_ns = 0;
-
-   Uint64 timestamp = 0;
-
    while(cs->running)
    {
-      timestamp = SDL_GetPerformanceCounter();
+      Uint64 timestamp = SDL_GetPerformanceCounter();
 
       if(procevents(cs))
       {
@@ -655,7 +652,7 @@ int run(coreState *cs)
       }
 
       timestamp = SDL_GetPerformanceCounter() - timestamp;
-      sleep_ns = framedelay(timestamp, cs->fps);
+      long sleep_ns = framedelay(timestamp, cs->fps);
 
       if(sleep_ns == FRAMEDELAY_ERR)
          return 1;
@@ -679,7 +676,7 @@ int run(coreState *cs)
       }
 
       cs->avg_sleep_ms_recent = 0;
-      for(i = 0; i < RECENT_FRAMES; i++) {
+      for(int i = 0; i < RECENT_FRAMES; i++) {
          cs->avg_sleep_ms_recent += cs->avg_sleep_ms_recent_array[i];
       }
 
@@ -1192,8 +1189,6 @@ int procgame(game_t *g, int input_enabled)
    if(!g)
       return -1;
 
-   Uint64 benchmark = 0;
-
    if(g->preframe)
    {
       if(g->preframe(g))
@@ -1206,7 +1201,7 @@ int procgame(game_t *g, int input_enabled)
          return 1;
    }
 
-   benchmark = SDL_GetPerformanceCounter();
+   Uint64 benchmark = SDL_GetPerformanceCounter();
 
    if(g->frame)
    {
@@ -1215,7 +1210,7 @@ int procgame(game_t *g, int input_enabled)
    }
 
    benchmark = SDL_GetPerformanceCounter() - benchmark;
-   //printf("%f\n", ((double)(benchmark) / 1000000000.0) * 1000);
+//   printf("%fms\n", (double)(benchmark) * 1000 / (double)SDL_GetPerformanceFrequency());
 
    if(g->draw)
    {
@@ -1341,13 +1336,13 @@ int request_fps(coreState *cs, double fps)
    return 0;
 }
 
-long framedelay(Uint64 ns_elap, double fps)
+static long framedelay(Uint64 ticks_elap, double fps)
 {
    if(fps < 1 || fps > 240)
       return FRAMEDELAY_ERR;
 
    struct timespec t = {0, 0};
-   double sec_elap = (double)(ns_elap) / 1000000000;
+   double sec_elap = (double)(ticks_elap) / SDL_GetPerformanceFrequency();
    double spf = (1 / fps);
 
    if(sec_elap < spf)
@@ -1355,6 +1350,7 @@ long framedelay(Uint64 ns_elap, double fps)
       t.tv_nsec = (long)((spf - sec_elap) * 1000000000);
 
       if(nanosleep(&t, NULL)) {
+         // this can happen when the user presses Ctrl+C
          printf("Error: nanosleep() returned failure during frame length calculation\n");
          return FRAMEDELAY_ERR;
       }

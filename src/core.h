@@ -235,7 +235,6 @@ int button_emergency_inactive(coreState *cs);
 int gfx_buttons_input(coreState *cs);
 
 int request_fps(coreState *cs, double fps);
-long framedelay(Uint64 ns_elap, double fps);
 
 struct replay *compare_replays(struct replay *r1, struct replay *r2);
 
